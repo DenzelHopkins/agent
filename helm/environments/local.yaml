@@ -2,6 +2,7 @@ database:
   storage: 5Gi
 
 llm:
+  enabled: true
   model: "llama3.1:8b"
   storage: 20Gi
 

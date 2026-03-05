@@ -3,6 +3,11 @@ image:
   tag: latest
   pullPolicy: Never
 
+anthropicApiKey: ""
+
+llm:
+  enabled: true
+
 env:
   LLM_PROVIDER: "anthropic"
   MODEL: "claude-sonnet-4-6"
