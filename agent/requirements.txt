@@ -1,4 +1,7 @@
 langchain
 langchain_ollama
-langgraph
+langchain_anthropic
 pymongo
+ddgs
+requests
+beautifulsoup4

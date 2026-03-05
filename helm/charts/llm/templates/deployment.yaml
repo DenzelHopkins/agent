@@ -14,15 +14,15 @@ spec:
     spec:
       initContainers:
         - name: pull-model
-          image: "{{ .Values.llm.image.repository }}:{{ .Values.llm.image.tag }}"
-          imagePullPolicy: {{ .Values.llm.image.pullPolicy }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - sh
             - -c
             - |
               ollama serve &
               until ollama list >/dev/null 2>&1; do sleep 1; done
-              ollama pull {{ .Values.llm.env.MODEL }}
+              ollama pull {{ .Values.llm.model }}
           env:
             - name: OLLAMA_MODELS
               value: /root/.ollama/models
@@ -31,8 +31,8 @@ spec:
               mountPath: /root/.ollama/models
       containers:
         - name: llm
-          image: "{{ .Values.llm.image.repository }}:{{ .Values.llm.image.tag }}"
-          imagePullPolicy: {{ .Values.llm.image.pullPolicy }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 11434
           env:
@@ -41,6 +41,9 @@ spec:
           volumeMounts:
             - name: models
               mountPath: /root/.ollama/models
+          resources:
+            limits:
+              cpu: "2"
           readinessProbe:
             exec:
               command: ["ollama", "list"]

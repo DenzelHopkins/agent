@@ -1,0 +1,7 @@
+image:
+  repository: mongo
+  tag: "8"
+  pullPolicy: IfNotPresent
+
+database:
+  storage: 5Gi

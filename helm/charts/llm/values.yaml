@@ -1,0 +1,8 @@
+image:
+  repository: ollama/ollama
+  tag: latest
+  pullPolicy: IfNotPresent
+
+llm:
+  model: "llama3:8b"
+  storage: 20Gi
