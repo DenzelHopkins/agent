@@ -19,8 +19,7 @@ releases:
   - name: llm
     chart: ./charts/llm
     namespace: agent
-    condition: llm.enabled
-    values:
+values:
       - charts/llm/values.yaml
       - environments/{{ .Environment.Name }}.yaml
 

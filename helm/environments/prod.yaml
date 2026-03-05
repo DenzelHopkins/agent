@@ -2,7 +2,6 @@ database:
   storage: 50Gi
 
 llm:
-  enabled: false
   model: "qwen3:8b"
   storage: 100Gi
 
