@@ -22,7 +22,7 @@ on:
 
 env:
   REGISTRY: ${{ secrets.CF_ORG_ID }}.${{ secrets.CF_CR_REGION }}.registry.cloudfleet.dev
-  IMAGE_TAG: ${{ github.ref_name }}
+  IMAGE_TAG: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   build-and-push:
