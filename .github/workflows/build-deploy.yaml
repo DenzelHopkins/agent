@@ -45,6 +45,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./agent
+          file: ./agent/Containerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.REGISTRY }}/agent:${{ env.IMAGE_TAG }}
           cache-from: type=gha,scope=agent
