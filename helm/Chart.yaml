@@ -1,0 +1,5 @@
+apiVersion: v2
+name: agent
+description: LangGraph agent with Ollama and MongoDB
+type: application
+version: 0.1.0

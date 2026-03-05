@@ -1,0 +1,22 @@
+releases:
+  - name: agent
+    chart: .
+    namespace: agent
+    hooks:
+      - events: ["presync"]
+        showlogs: true
+        command: "nerdctl"
+        args:
+          - --namespace
+          - k8s.io
+          - build
+          - -t
+          - agent:latest
+          - ../agent
+    values:
+      - agent:
+          env:
+            QUERY: "What is in the database?"
+        llm:
+          env:
+            MODEL: "llama3.2"
