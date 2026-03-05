@@ -6,6 +6,8 @@ environments:
     values:
       - environments/prod.yaml
 
+---
+
 releases:
   - name: database
     chart: ./charts/database
