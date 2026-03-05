@@ -39,7 +39,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.CF_ACCESS_TOKEN }}
-          password: ${{ secrets.CF_TOKEN_SECRET }}
+          password: ${{ secrets.CF_ACCESS_TOKEN_SECRET }}
 
       - name: Build and push agent
         uses: docker/build-push-action@v6
@@ -66,7 +66,7 @@ jobs:
 
       - name: Create Cluster Config
         run: |
-          cloudfleet auth add-profile token default ${{ secrets.CF_ORG_ID }} ${{ secrets.CF_ACCESS_TOKEN }} ${{ secrets.CF_TOKEN_SECRET }}
+          cloudfleet auth add-profile token default ${{ secrets.CF_ORG_ID }} ${{ secrets.CF_ACCESS_TOKEN }} ${{ secrets.CF_ACCESS_TOKEN_SECRET }}
           cloudfleet clusters kubeconfig ${{ secrets.CF_CLUSTER_ID }}
 
       - name: Create agent secrets
