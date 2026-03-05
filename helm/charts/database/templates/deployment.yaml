@@ -11,6 +11,8 @@ spec:
     metadata:
       labels:
         app: mongo
+      annotations:
+        karpenter.sh/do-not-disrupt: "true"
     spec:
       containers:
         - name: mongo
