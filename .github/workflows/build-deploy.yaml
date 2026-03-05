@@ -68,12 +68,6 @@ jobs:
           cloudfleet auth add-profile token default ${{ secrets.CF_ORG_ID }} ${{ secrets.CF_ACCESS_TOKEN }} ${{ secrets.CF_ACCESS_TOKEN_SECRET }}
           cloudfleet clusters kubeconfig ${{ secrets.CF_CLUSTER_ID }}
 
-      - name: Create agent secrets
-        run: |
-          kubectl create secret generic agent-secrets -n agent \
-            --from-literal=ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }} \
-            --dry-run=client -o yaml | kubectl apply -f -
-
       - name: Deploy
         uses: helmfile/helmfile-action@v2.2.0
         with:
@@ -82,3 +76,4 @@ jobs:
             -f ./helm/helmfile.yaml apply
             --set image.repository=${{ env.REGISTRY }}/agent
             --set image.tag=${{ env.IMAGE_TAG }}
+            --set secrets.anthropicApiKey=${{ secrets.ANTHROPIC_API_KEY }}

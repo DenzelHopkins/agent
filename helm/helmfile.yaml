@@ -24,12 +24,17 @@ releases:
       - charts/llm/values.yaml
       - environments/{{ .Environment.Name }}.yaml
 
+  - name: secrets
+    chart: ./charts/secrets
+    namespace: agent
+
   - name: agent
     chart: ./charts/agent
     namespace: agent
     needs:
       - agent/llm
       - agent/database
+      - agent/secrets
     values:
       - charts/agent/values.yaml
       - environments/{{ .Environment.Name }}.yaml
