@@ -6,8 +6,6 @@ environments:
     values:
       - environments/prod.yaml
 
----
-
 releases:
   - name: database
     chart: ./charts/database
@@ -19,7 +17,7 @@ releases:
   - name: llm
     chart: ./charts/llm
     namespace: agent
-values:
+    values:
       - charts/llm/values.yaml
       - environments/{{ .Environment.Name }}.yaml
 
