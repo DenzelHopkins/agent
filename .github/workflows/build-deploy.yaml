@@ -21,7 +21,7 @@ on:
     branches: [main, develop]
 
 env:
-  REGISTRY: ${{ secrets.CF_ORG_ID }}.${{ secrets.CFCR_REGION }}.registry.cloudfleet.dev
+  REGISTRY: ${{ secrets.CF_ORG_ID }}.${{ secrets.CF_CR_REGION }}.registry.cloudfleet.dev
   IMAGE_TAG: ${{ github.ref_name }}
 
 jobs:
