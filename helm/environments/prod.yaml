@@ -1,6 +1,5 @@
 database:
   storage: 50Gi
-  storageClassName: gp3
 
 llm:
   enabled: false
