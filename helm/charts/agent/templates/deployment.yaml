@@ -27,14 +27,21 @@ spec:
             - until nc -z mongo 27017; do sleep 2; done
       containers:
         - name: agent
-          image: "{{ .Values.agent.image.repository }}:{{ .Values.agent.image.tag }}"
-          imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            - name: LLM_PROVIDER
+              value: {{ .Values.env.LLM_PROVIDER | quote }}
             - name: MODEL
-              value: {{ .Values.llm.env.MODEL | quote }}
+              value: {{ .Values.env.MODEL | quote }}
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: agent-secrets
+                  key: ANTHROPIC_API_KEY
             - name: LLM_URL
-              value: {{ .Values.agent.env.LLM_URL | quote }}
+              value: {{ .Values.env.LLM_URL | quote }}
             - name: MONGO_URL
-              value: {{ .Values.agent.env.MONGO_URL | quote }}
+              value: {{ .Values.env.MONGO_URL | quote }}
             - name: QUERY
-              value: {{ .Values.agent.env.QUERY | quote }}
+              value: {{ .Values.env.QUERY | quote }}
