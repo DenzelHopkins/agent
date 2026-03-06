@@ -26,7 +26,7 @@ class LoggingCallback(BaseCallbackHandler):
         model = serialized.get("kwargs", {}).get("model", serialized.get("name", "?"))
         _logger.info("LLM start: model=%s prompts=%d", model, len(prompts))
         for i, p in enumerate(prompts):
-            _logger.debug("LLM prompt[%d]: %s", i, p[:500])
+            _logger.info("LLM prompt[%d]: %s", i, p[:500])
 
     def on_llm_end(self, response: Any, **kwargs: Any) -> None:
         generations = response.generations
