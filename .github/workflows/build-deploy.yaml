@@ -70,6 +70,12 @@ jobs:
           cloudfleet auth add-profile token default ${{ secrets.CF_ORG_ID }} ${{ secrets.CF_ACCESS_TOKEN }} ${{ secrets.CF_ACCESS_TOKEN_SECRET }}
           cloudfleet clusters kubeconfig ${{ secrets.CF_CLUSTER_ID }}
 
+      - name: Patch mongo strategy to Recreate
+        run: |
+          kubectl patch deployment mongo -n agent \
+            -p '{"spec":{"strategy":{"type":"Recreate","rollingUpdate":null}}}' \
+            --type=merge 2>/dev/null || true
+
       - name: Deploy infrastructure
         uses: helmfile/helmfile-action@v2.2.0
         with:
