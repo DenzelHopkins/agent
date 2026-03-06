@@ -47,7 +47,9 @@ jobs:
           context: ./agent
           push: ${{ github.event_name == 'push' }}
           file: ./agent/Containerfile
-          tags: ${{ env.REGISTRY }}/agent:${{ github.sha }}
+          tags: |
+            ${{ env.REGISTRY }}/agent:${{ env.IMAGE_TAG }}
+            ${{ env.REGISTRY }}/agent:${{ github.sha }}
           cache-to: type=gha,scope=agent,mode=max
 
   deploy:
