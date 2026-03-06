@@ -83,6 +83,9 @@ jobs:
             -l name=database
             -l name=llm
 
+      - name: Delete existing agent Job
+        run: kubectl delete job agent -n agent --ignore-not-found
+
       - name: Deploy agent
         uses: helmfile/helmfile-action@v2.2.0
         with:
