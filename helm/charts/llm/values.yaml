@@ -6,7 +6,7 @@ image:
 resources:
   requests:
     cpu: "1"
-    memory: "6Gi"
+    memory: "2Gi"
 
 llm:
   model: "llama3:8b"
