@@ -45,7 +45,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./agent
-          push: true #${{ github.event_name != 'pull_request' }}
+          push: ${{ github.event_name == 'push' }}
           file: ./agent/Containerfile
           tags: ${{ env.REGISTRY }}/agent:${{ env.IMAGE_TAG }}
           cache-from: type=gha,scope=agent
@@ -53,6 +53,7 @@ jobs:
 
   deploy:
     needs: build-and-push
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
