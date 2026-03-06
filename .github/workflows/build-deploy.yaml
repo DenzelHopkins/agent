@@ -1,0 +1,100 @@
+# Agent — CI/CD Pipeline
+#
+# Triggers:
+#   - Push to main/develop: build + push + deploy
+#   - PR to main/develop:   build only (no push/deploy)
+#
+# Required secrets:
+#   - CF_ORG_ID:          Cloudfleet organization ID
+#   - CF_CR_REGION:       Cloudfleet container registry region
+#   - CF_ACCESS_TOKEN:        Cloudfleet token ID
+#   - CF_ACCESS_TOKEN_SECRET: Cloudfleet token secret
+#   - CF_CLUSTER_ID:      Cloudfleet cluster ID
+#   - ANTHROPIC_API_KEY:  Anthropic API key
+
+name: Agent pipeline
+
+on:
+  push:
+    branches: [main, develop]
+
+env:
+  REGISTRY: ${{ secrets.CF_ORG_ID }}.${{ secrets.CF_CR_REGION }}.registry.cloudfleet.dev
+  IMAGE_TAG: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Cloudfleet Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.CF_ACCESS_TOKEN }}
+          password: ${{ secrets.CF_ACCESS_TOKEN_SECRET }}
+
+      - name: Build and push agent
+        uses: docker/build-push-action@v6
+        with:
+          context: ./agent
+          file: ./agent/Containerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/agent:${{ env.IMAGE_TAG }}
+            ${{ env.REGISTRY }}/agent:${{ github.sha }}
+          cache-to: type=gha,scope=agent,mode=max
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Cloudfleet CLI
+        run: |
+          curl -fsSL https://downloads.cloudfleet.ai/apt/pubkey.gpg | sudo tee /usr/share/keyrings/cloudfleet-archive-keyring.gpg >/dev/null
+          echo "deb [signed-by=/usr/share/keyrings/cloudfleet-archive-keyring.gpg] https://downloads.cloudfleet.ai/apt stable main" | sudo tee /etc/apt/sources.list.d/cloudfleet.list
+          sudo apt-get update && sudo apt-get install -y cloudfleet
+
+      - name: Create Cluster Config
+        run: |
+          cloudfleet auth add-profile token default ${{ secrets.CF_ORG_ID }} ${{ secrets.CF_ACCESS_TOKEN }} ${{ secrets.CF_ACCESS_TOKEN_SECRET }}
+          cloudfleet clusters kubeconfig ${{ secrets.CF_CLUSTER_ID }}
+ 
+      - name: Destroy llm if disabled
+        run: |
+          LLM_ENABLED=$(grep -A1 '^llm:' helm/environments/prod.yaml | grep 'enabled:' | awk '{print $2}')
+          if [ "$LLM_ENABLED" = "false" ]; then
+            helm uninstall llm -n agent --ignore-not-found || true
+          fi
+
+      - name: Deploy infrastructure
+        uses: helmfile/helmfile-action@v2.2.0
+        with:
+          helmfile-args: >-
+            -e prod
+            -f ./helm/helmfile.yaml apply
+            -l name=database
+            -l name=llm
+
+      - name: Delete existing agent Job
+        run: kubectl delete job agent -n agent --ignore-not-found
+
+      - name: Deploy agent
+        uses: helmfile/helmfile-action@v2.2.0
+        with:
+          helmfile-args: >-
+            -e prod
+            -f ./helm/helmfile.yaml apply
+            -l name=agent
+            --set image.repository=${{ env.REGISTRY }}/agent
+            --set image.tag=${{ github.sha }}
+            --set secret.anthropicApiKey=${{ secrets.ANTHROPIC_API_KEY }}
+

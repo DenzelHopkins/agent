@@ -3,6 +3,12 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
+resources:
+  requests:
+    cpu: "1"
+    memory: "2Gi"
+
 llm:
   model: "llama3:8b"
   storage: 20Gi
+  storageClassName: ""

@@ -4,6 +4,8 @@ metadata:
   name: mongo
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: mongo
@@ -11,6 +13,8 @@ spec:
     metadata:
       labels:
         app: mongo
+      annotations:
+        karpenter.sh/do-not-disrupt: "true"
     spec:
       containers:
         - name: mongo
@@ -21,6 +25,10 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /data/db
+          resources:
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
           readinessProbe:
             exec:
               command: ["mongosh", "--eval", "db.runCommand({ping:1})"]

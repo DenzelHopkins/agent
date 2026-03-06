@@ -3,9 +3,16 @@ image:
   tag: latest
   pullPolicy: Never
 
-env:
-  LLM_PROVIDER: "anthropic"
-  MODEL: "claude-sonnet-4-6"
-  LLM_URL: "http://llm:11434"
-  MONGO_URL: "mongodb://mongo:27017"
-  QUERY: ""
+secret:
+  anthropicApiKey: ""
+
+llm:
+  enabled: true
+  model: "qwen2.5:3b"
+  provider: "ollama"
+  url: "http://llm:11434"
+
+mongo:
+  url: "mongodb://mongo:27017"
+
+query: ""

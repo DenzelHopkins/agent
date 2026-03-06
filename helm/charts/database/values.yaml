@@ -3,5 +3,11 @@ image:
   tag: "8"
   pullPolicy: IfNotPresent
 
+resources:
+  requests:
+    cpu: "500m"
+    memory: "512Mi"
+
 database:
   storage: 5Gi
+  storageClassName: ""

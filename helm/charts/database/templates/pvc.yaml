@@ -5,6 +5,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: {{ .Values.database.storageClassName | quote }}
   resources:
     requests:
       storage: {{ .Values.database.storage }}
