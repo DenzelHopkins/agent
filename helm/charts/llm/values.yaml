@@ -11,3 +11,4 @@ resources:
 llm:
   model: "llama3:8b"
   storage: 20Gi
+  storageClassName: ""

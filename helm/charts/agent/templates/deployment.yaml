@@ -19,7 +19,7 @@ spec:
           command:
             - sh
             - -c
-            - until wget -qO- http://llm:11434/api/tags 2>/dev/null | grep -q "{{ .Values.env.MODEL }}"; do sleep 5; done
+            - until wget -qO- http://llm:11434/api/tags 2>/dev/null | grep -q "{{ .Values.llm.model }}"; do sleep 5; done
         {{- end }}
         - name: wait-for-mongo
           image: busybox
@@ -33,17 +33,17 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: LLM_PROVIDER
-              value: {{ .Values.env.LLM_PROVIDER | quote }}
+              value: {{ .Values.llm.provider | quote }}
             - name: MODEL
-              value: {{ .Values.env.MODEL | quote }}
+              value: {{ .Values.llm.model | quote }}
             - name: ANTHROPIC_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: agent-secrets
                   key: ANTHROPIC_API_KEY
             - name: LLM_URL
-              value: {{ .Values.env.LLM_URL | quote }}
+              value: {{ .Values.llm.url | quote }}
             - name: MONGO_URL
-              value: {{ .Values.env.MONGO_URL | quote }}
+              value: {{ .Values.mongo.url | quote }}
             - name: QUERY
-              value: {{ .Values.env.QUERY | quote }}
+              value: {{ .Values.query | quote }}

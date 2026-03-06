@@ -10,3 +10,4 @@ resources:
 
 database:
   storage: 5Gi
+  storageClassName: ""

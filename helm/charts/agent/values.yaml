@@ -3,14 +3,16 @@ image:
   tag: latest
   pullPolicy: Never
 
-anthropicApiKey: ""
+secret:
+  anthropicApiKey: ""
 
 llm:
   enabled: true
+  provider: "anthropic"
+  model: "claude-sonnet-4-6"
+  url: "http://llm:11434"
 
-env:
-  LLM_PROVIDER: "anthropic"
-  MODEL: "claude-sonnet-4-6"
-  LLM_URL: "http://llm:11434"
-  MONGO_URL: "mongodb://mongo:27017"
-  QUERY: ""
+mongo:
+  url: "mongodb://mongo:27017"
+
+query: ""
