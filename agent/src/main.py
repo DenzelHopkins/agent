@@ -1,4 +1,4 @@
-from database import migrate
+from models.database import migrate
 from tools import web_fetch, web_search, save_promises
 from langchain.agents import create_agent
 import os
