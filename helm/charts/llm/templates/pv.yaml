@@ -1,3 +1,4 @@
+{{- if eq .Values.llm.storageClassName "" }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -13,3 +14,4 @@ spec:
   claimRef:
     namespace: agent
     name: llm-models
+{{- end }}

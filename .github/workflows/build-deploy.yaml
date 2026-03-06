@@ -88,5 +88,5 @@ jobs:
             -l name=agent
             --set image.repository=${{ env.REGISTRY }}/agent
             --set image.tag=${{ env.IMAGE_TAG }}
-            --set anthropicApiKey=${{ secrets.ANTHROPIC_API_KEY }}
+            --set secret.anthropicApiKey=${{ secrets.ANTHROPIC_API_KEY }}
 
