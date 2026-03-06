@@ -47,8 +47,7 @@ jobs:
           context: ./agent
           push: ${{ github.event_name == 'push' }}
           file: ./agent/Containerfile
-          tags: ${{ env.REGISTRY }}/agent:${{ env.IMAGE_TAG }}
-          cache-from: type=gha,scope=agent
+          tags: ${{ env.REGISTRY }}/agent:${{ github.sha }}
           cache-to: type=gha,scope=agent,mode=max
 
   deploy:
@@ -93,6 +92,6 @@ jobs:
             -f ./helm/helmfile.yaml apply
             -l name=agent
             --set image.repository=${{ env.REGISTRY }}/agent
-            --set image.tag=${{ env.IMAGE_TAG }}
+            --set image.tag=${{ github.sha }}
             --set secret.anthropicApiKey=${{ secrets.ANTHROPIC_API_KEY }}
 
