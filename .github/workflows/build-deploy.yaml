@@ -67,12 +67,13 @@ jobs:
         run: |
           cloudfleet auth add-profile token default ${{ secrets.CF_ORG_ID }} ${{ secrets.CF_ACCESS_TOKEN }} ${{ secrets.CF_ACCESS_TOKEN_SECRET }}
           cloudfleet clusters kubeconfig ${{ secrets.CF_CLUSTER_ID }}
-
-      - name: Patch mongo strategy to Recreate
+ 
+      - name: Destroy llm if disabled
         run: |
-          kubectl patch deployment mongo -n agent \
-            -p '{"spec":{"strategy":{"type":"Recreate","rollingUpdate":null}}}' \
-            --type=merge 2>/dev/null || true
+          LLM_ENABLED=$(grep -A1 '^llm:' helm/environments/prod.yaml | grep 'enabled:' | awk '{print $2}')
+          if [ "$LLM_ENABLED" = "false" ]; then
+            helm uninstall llm -n agent --ignore-not-found || true
+          fi
 
       - name: Deploy infrastructure
         uses: helmfile/helmfile-action@v2.2.0
