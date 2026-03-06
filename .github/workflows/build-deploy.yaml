@@ -44,6 +44,7 @@ jobs:
         with:
           context: ./agent
           file: ./agent/Containerfile
+          push: true
           tags: |
             ${{ env.REGISTRY }}/agent:${{ env.IMAGE_TAG }}
             ${{ env.REGISTRY }}/agent:${{ github.sha }}
