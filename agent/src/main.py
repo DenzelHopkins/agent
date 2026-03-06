@@ -29,16 +29,26 @@ else:
         base_url=os.environ["LLM_URL"],
     )
 
-# Build agent with tools
-agent = create_agent(llm, tools=[web_search, web_fetch, save_promises])
-
-# Run agent with query
-agent.invoke(
+# Step 1: search and fetch content
+search_agent = create_agent(llm, tools=[web_search, web_fetch])
+search_result = search_agent.invoke(
     {"messages": [{"role": "user", "content": (
         f"{os.environ['QUERY']} "
-        "Suche zuerst mit web_search nach Ergebnissen. "
-        "Extrahiere dann die Versprechen aus den Suchergebnissen. "
-        "Speichere sie erst danach mit save_promises. "
+        "Suche mit web_search und rufe die relevantesten Seiten mit web_fetch ab. "
+        "Gib den gesamten gesammelten Inhalt zurück."
+    )}]},
+    config={"callbacks": [LoggingCallback()]},
+)
+
+# Extract final text from search result
+search_content = search_result["messages"][-1].content
+
+# Step 2: extract promises and save
+save_agent = create_agent(llm, tools=[save_promises])
+save_agent.invoke(
+    {"messages": [{"role": "user", "content": (
+        f"Hier sind Webinhalte über Versprechen von Friedrich Merz:\n\n{search_content}\n\n"
+        "Extrahiere alle Versprechen und speichere sie mit save_promises. "
         "Jedes Versprechen muss enthalten: promise (String), source (URL-String), date (YYYY-MM-DD-String)."
     )}]},
     config={"callbacks": [LoggingCallback()]},
