@@ -42,8 +42,9 @@ spec:
             - name: models
               mountPath: /root/.ollama/models
           resources:
-            limits:
-              cpu: "2"
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
           readinessProbe:
             exec:
               command: ["ollama", "list"]

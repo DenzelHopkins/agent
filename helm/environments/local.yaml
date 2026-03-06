@@ -7,7 +7,7 @@ llm:
   storage: 20Gi
 
 image:
-  pullPolicy: Never
+  pullPolicy: IfNotPresent
 env:
   LLM_PROVIDER: "ollama"
   MODEL: "llama3.1:8b"

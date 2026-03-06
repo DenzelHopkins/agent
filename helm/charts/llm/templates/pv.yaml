@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: llm-models
+spec:
+  capacity:
+    storage: {{ .Values.llm.storage }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /data/llm
+  claimRef:
+    namespace: agent
+    name: llm-models

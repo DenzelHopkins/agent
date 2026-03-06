@@ -13,12 +13,14 @@ spec:
         app: agent
     spec:
       initContainers:
+        {{- if .Values.llm.enabled }}
         - name: wait-for-llm
           image: busybox
           command:
             - sh
             - -c
-            - until wget -qO- http://llm:11434 >/dev/null 2>&1; do sleep 2; done
+            - until wget -qO- http://llm:11434/api/tags 2>/dev/null | grep -q "{{ .Values.env.MODEL }}"; do sleep 5; done
+        {{- end }}
         - name: wait-for-mongo
           image: busybox
           command:

@@ -2,15 +2,15 @@ database:
   storage: 50Gi
 
 llm:
-  enabled: false
-  model: "qwen3:8b"
+  enabled: true
+  model: "qwen2.5:3b"
   storage: 100Gi
 
 image:
   pullPolicy: Always
 env:
-  LLM_PROVIDER: "anthropic"
-  MODEL: "claude-sonnet-4-6"
+  LLM_PROVIDER: "ollama"
+  MODEL: "qwen2.5:3b"
   LLM_URL: "http://llm:11434"
   MONGO_URL: "mongodb://mongo:27017"
   QUERY: "Search the internet for the promises of Friedrich Merz."
