@@ -1,17 +1,14 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: agent
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: agent
   template:
     metadata:
       labels:
         app: agent
     spec:
+      restartPolicy: OnFailure
       initContainers:
         {{- if .Values.llm.enabled }}
         - name: wait-for-llm
