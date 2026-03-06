@@ -2,9 +2,11 @@ database:
   storage: 50Gi
 
 llm:
-  enabled: false
-  model: "claude-sonnet-4-6"
-  provider: "anthropic"
+  enabled: true
+  model: "qwen2.5:3b"
+  storage: 100Gi
+  provider: "ollama"
+  url: "http://llm:11434"
 
 mongo:
   url: "mongodb://mongo:27017"
