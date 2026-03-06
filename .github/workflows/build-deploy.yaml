@@ -74,13 +74,20 @@ jobs:
             -p '{"spec":{"strategy":{"type":"Recreate","rollingUpdate":null}}}' \
             --type=merge 2>/dev/null || true
 
-      - name: Deploy infrastructure
+      - name: Deploy database
         uses: helmfile/helmfile-action@v2.2.0
         with:
           helmfile-args: >-
             -e prod
             -f ./helm/helmfile.yaml apply
             -l name=database
+
+      - name: Deploy llm
+        uses: helmfile/helmfile-action@v2.2.0
+        with:
+          helmfile-args: >-
+            -e prod
+            -f ./helm/helmfile.yaml apply
             -l name=llm
 
       - name: Delete existing agent Job
