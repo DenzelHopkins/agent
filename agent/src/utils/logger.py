@@ -26,19 +26,19 @@ class LoggingCallback(BaseCallbackHandler):
         model = serialized.get("kwargs", {}).get("model", serialized.get("name", "?"))
         _logger.info("LLM start: model=%s prompts=%d", model, len(prompts))
         for i, p in enumerate(prompts):
-            _logger.info("LLM prompt[%d]: %s", i, p[:500])
+            _logger.info("LLM prompt[%d]: %s", i, p)
 
     def on_llm_end(self, response: Any, **kwargs: Any) -> None:
         generations = response.generations
         text = generations[0][0].text if generations else ""
-        _logger.info("LLM end: %s", text[:300])
+        _logger.info("LLM end: %s", text)
 
     def on_tool_start(self, serialized: dict, input_str: str, **kwargs: Any) -> None:
         name = serialized.get("name", "?")
-        _logger.info("Tool start: %s input=%s", name, input_str[:300])
+        _logger.info("Tool start: %s input=%s", name, input_str)
 
     def on_tool_end(self, output: str, **kwargs: Any) -> None:
-        _logger.info("Tool end: %s", str(output)[:300])
+        _logger.info("Tool end: %s", str(output))
 
     def on_tool_error(self, error: BaseException, **kwargs: Any) -> None:
         _logger.error("Tool error: %s", error)
