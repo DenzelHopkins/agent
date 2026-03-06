@@ -36,7 +36,9 @@ agent = create_agent(llm, tools=[web_search, web_fetch, save_promises])
 agent.invoke(
     {"messages": [{"role": "user", "content": (
         f"{os.environ['QUERY']} "
-        "Finde Versprechen und speichere sie mit dem save_promises-Tool."
+        "Suche zuerst mit web_search nach Ergebnissen. "
+        "Extrahiere dann die Versprechen aus den Suchergebnissen. "
+        "Speichere sie erst danach mit save_promises. "
         "Jedes Versprechen muss enthalten: promise (String), source (URL-String), date (YYYY-MM-DD-String)."
     )}]},
     config={"callbacks": [LoggingCallback()]},
