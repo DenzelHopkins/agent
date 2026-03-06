@@ -17,8 +17,6 @@ name: Agent pipeline
 on:
   push:
     branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
 
 env:
   REGISTRY: ${{ secrets.CF_ORG_ID }}.${{ secrets.CF_CR_REGION }}.registry.cloudfleet.dev
@@ -45,7 +43,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./agent
-          push: ${{ github.event_name == 'push' }}
           file: ./agent/Containerfile
           tags: |
             ${{ env.REGISTRY }}/agent:${{ env.IMAGE_TAG }}
@@ -54,7 +51,6 @@ jobs:
 
   deploy:
     needs: build-and-push
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
