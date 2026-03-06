@@ -1,12 +1,12 @@
+from database import migrate
+from tools import web_fetch, web_search, save_promises
+from langchain.agents import create_agent
 import os
 
 from utils import get_logger, LoggingCallback
 
 logger = get_logger(__name__)
 
-from langchain.agents import create_agent
-from tools import web_fetch, web_search, save_promises
-from database import migrate
 
 # Run database migrations
 migrate.run()
@@ -36,8 +36,8 @@ agent = create_agent(llm, tools=[web_search, web_fetch, save_promises])
 agent.invoke(
     {"messages": [{"role": "user", "content": (
         f"{os.environ['QUERY']} "
-        "Find promises and save them using the save_promises tool. "
-        "Each promise must have: promise (string), source (URL string), date (YYYY-MM-DD string)."
+        "Finde Versprechen und speichere sie mit dem save_promises-Tool."
+        "Jedes Versprechen muss enthalten: promise (String), source (URL-String), date (YYYY-MM-DD-String)."
     )}]},
     config={"callbacks": [LoggingCallback()]},
 )

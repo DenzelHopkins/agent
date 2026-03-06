@@ -16,4 +16,4 @@ mongo:
 image:
   pullPolicy: IfNotPresent
 
-query: "Search the internet for the promises of Friedrich Merz."
+query: "Durchsuche das Internet nach den Versprechen von Friedrich Merz."

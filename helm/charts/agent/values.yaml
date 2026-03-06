@@ -8,8 +8,8 @@ secret:
 
 llm:
   enabled: true
-  provider: "anthropic"
-  model: "claude-sonnet-4-6"
+  model: "qwen2.5:3b"
+  provider: "ollama"
   url: "http://llm:11434"
 
 mongo:
