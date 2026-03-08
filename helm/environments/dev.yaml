@@ -1,5 +1,5 @@
 database:
-  storage: 50Gi
+  storage: 10Gi
 
 llm:
   enabled: false
