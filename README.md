@@ -6,5 +6,5 @@ A LangGraph-based web research agent that searches the internet for political pr
 graph TD
     Agent --> LLM
     Agent --> WebSearch[Web Search]
-    Agent --> Database[MongoDB]
+    Agent --> Database[Database]
 ```
