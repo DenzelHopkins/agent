@@ -1,7 +1,7 @@
 env: dev
 
 database:
-  storage: 10Gi
+  storage: 50Gi
 
 llm:
   enabled: false
