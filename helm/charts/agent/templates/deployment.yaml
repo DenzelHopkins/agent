@@ -1,13 +1,13 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Values.env }}-agent
+  name: agent
 spec:
   backoffLimit: 5
   template:
     metadata:
       labels:
-        app: {{ .Values.env }}-agent
+        app: agent
     spec:
       restartPolicy: OnFailure
       initContainers:

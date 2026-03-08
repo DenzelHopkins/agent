@@ -14,14 +14,14 @@ environments:
 releases:
   - name: database
     chart: ./charts/database
-    namespace: agent
+    namespace: "{{ .Environment.Name }}-agent"
     values:
       - charts/database/values.yaml
       - environments/{{ .Environment.Name }}.yaml
 
   - name: llm
     chart: ./charts/llm
-    namespace: agent
+    namespace: "{{ .Environment.Name }}-agent"
     condition: llm.enabled
     values:
       - charts/llm/values.yaml
@@ -29,7 +29,7 @@ releases:
 
   - name: agent
     chart: ./charts/agent
-    namespace: agent
+    namespace: "{{ .Environment.Name }}-agent"
     values:
       - charts/agent/values.yaml
       - environments/{{ .Environment.Name }}.yaml
