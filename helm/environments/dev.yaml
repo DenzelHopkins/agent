@@ -1,5 +1,3 @@
-env: dev
-
 database:
   storage: 50Gi
 

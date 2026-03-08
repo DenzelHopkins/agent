@@ -73,7 +73,7 @@ jobs:
         run: |
           LLM_ENABLED=$(grep -A1 '^llm:' helm/environments/${{ env.HELM_ENV }}.yaml | grep 'enabled:' | awk '{print $2}')
           if [ "$LLM_ENABLED" = "false" ]; then
-            helm uninstall llm -n agent --ignore-not-found || true
+            helm uninstall llm -n ${{ env.HELM_ENV }}-agent --ignore-not-found || true
           fi
 
       - name: Deploy infrastructure
@@ -86,7 +86,7 @@ jobs:
             -l name=llm
 
       - name: Delete existing agent Job
-        run: kubectl delete job ${{ env.HELM_ENV }}-agent -n agent --ignore-not-found
+        run: kubectl delete job agent -n ${{ env.HELM_ENV }}-agent --ignore-not-found
 
       - name: Deploy agent
         uses: helmfile/helmfile-action@v2.2.0
