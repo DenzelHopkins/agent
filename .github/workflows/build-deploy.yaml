@@ -21,6 +21,7 @@ on:
 env:
   REGISTRY: ${{ secrets.CF_ORG_ID }}.${{ secrets.CF_CR_REGION }}.registry.cloudfleet.dev
   IMAGE_TAG: ${{ github.head_ref || github.ref_name }}
+  HELM_ENV: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
 
 jobs:
   build-and-push:
@@ -70,7 +71,7 @@ jobs:
  
       - name: Destroy llm if disabled
         run: |
-          LLM_ENABLED=$(grep -A1 '^llm:' helm/environments/prod.yaml | grep 'enabled:' | awk '{print $2}')
+          LLM_ENABLED=$(grep -A1 '^llm:' helm/environments/${{ env.HELM_ENV }}.yaml | grep 'enabled:' | awk '{print $2}')
           if [ "$LLM_ENABLED" = "false" ]; then
             helm uninstall llm -n agent --ignore-not-found || true
           fi
@@ -79,7 +80,7 @@ jobs:
         uses: helmfile/helmfile-action@v2.2.0
         with:
           helmfile-args: >-
-            -e prod
+            -e ${{ env.HELM_ENV }}
             -f ./helm/helmfile.yaml apply
             -l name=database
             -l name=llm
@@ -91,7 +92,7 @@ jobs:
         uses: helmfile/helmfile-action@v2.2.0
         with:
           helmfile-args: >-
-            -e prod
+            -e ${{ env.HELM_ENV }}
             -f ./helm/helmfile.yaml apply
             -l name=agent
             --set image.repository=${{ env.REGISTRY }}/agent
