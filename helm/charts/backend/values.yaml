@@ -1,0 +1,7 @@
+image:
+  repository: backend
+  tag: latest
+  pullPolicy: Never
+
+service:
+  port: 8000

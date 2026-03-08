@@ -17,3 +17,9 @@ image:
   pullPolicy: IfNotPresent
 
 query: "Durchsuche das Internet nach den Versprechen von Friedrich Merz."
+
+admin:
+  password: "admin"
+
+service:
+  port: 3000

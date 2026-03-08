@@ -33,3 +33,43 @@ releases:
     values:
       - charts/agent/values.yaml
       - environments/{{ .Environment.Name }}.yaml
+    hooks:
+      - events: ["prepare"]
+        command: "../scripts/build-local.sh"
+        args: ["{{ .Environment.Name }}", "agent:latest", "../agent"]
+
+  - name: frontend
+    chart: ./charts/frontend
+    namespace: "{{ .Environment.Name }}-agent"
+    values:
+      - charts/frontend/values.yaml
+      - environments/{{ .Environment.Name }}.yaml
+    hooks:
+      - events: ["prepare"]
+        command: "../scripts/build-local.sh"
+        args: ["{{ .Environment.Name }}", "frontend:latest", "../frontend"]
+
+  - name: backend
+    chart: ./charts/backend
+    namespace: "{{ .Environment.Name }}-agent"
+    values:
+      - charts/backend/values.yaml
+      - environments/{{ .Environment.Name }}.yaml
+    hooks:
+      - events: ["prepare"]
+        command: "../scripts/build-local.sh"
+        args: ["{{ .Environment.Name }}", "backend:latest", "../backend"]
+
+  - name: keycloak
+    chart: ./charts/keycloak
+    namespace: "{{ .Environment.Name }}-agent"
+    values:
+      - charts/keycloak/values.yaml
+      - environments/{{ .Environment.Name }}.yaml
+
+  - name: loadbalancer
+    chart: ./charts/loadbalancer
+    namespace: "{{ .Environment.Name }}-agent"
+    values:
+      - charts/loadbalancer/values.yaml
+      - environments/{{ .Environment.Name }}.yaml

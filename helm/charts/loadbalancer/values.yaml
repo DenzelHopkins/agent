@@ -1,0 +1,12 @@
+image:
+  repository: nginx
+  tag: alpine
+  pullPolicy: IfNotPresent
+
+service:
+  port: 80
+
+upstreams:
+  frontend: "frontend:80"
+  backend: "backend:8000"
+  keycloak: "keycloak:8080"
