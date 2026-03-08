@@ -1,0 +1,15 @@
+database:
+  storage: 10Gi
+
+llm:
+  enabled: false
+  model: "claude-sonnet-4-6"
+  provider: "anthropic"
+
+mongo:
+  url: "mongodb://mongo:27017"
+
+image:
+  pullPolicy: Always
+
+query: "Durchsuche das Internet nach den Versprechen von Friedrich Merz."

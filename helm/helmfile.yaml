@@ -2,6 +2,9 @@ environments:
   local:
     values:
       - environments/local.yaml
+  dev:
+    values:
+      - environments/dev.yaml
   prod:
     values:
       - environments/prod.yaml
