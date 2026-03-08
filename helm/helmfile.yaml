@@ -1,22 +1,35 @@
-releases:
-  - name: agent
-    chart: .
-    namespace: agent
-    hooks:
-      - events: ["presync"]
-        showlogs: true
-        command: "nerdctl"
-        args:
-          - --namespace
-          - k8s.io
-          - build
-          - -t
-          - agent:latest
-          - ../agent
+environments:
+  local:
     values:
-      - agent:
-          env:
-            QUERY: "What is in the database?"
-        llm:
-          env:
-            MODEL: "llama3.2"
+      - environments/local.yaml
+  dev:
+    values:
+      - environments/dev.yaml
+  prod:
+    values:
+      - environments/prod.yaml
+
+---
+
+releases:
+  - name: database
+    chart: ./charts/database
+    namespace: agent
+    values:
+      - charts/database/values.yaml
+      - environments/{{ .Environment.Name }}.yaml
+
+  - name: llm
+    chart: ./charts/llm
+    namespace: agent
+    condition: llm.enabled
+    values:
+      - charts/llm/values.yaml
+      - environments/{{ .Environment.Name }}.yaml
+
+  - name: agent
+    chart: ./charts/agent
+    namespace: agent
+    values:
+      - charts/agent/values.yaml
+      - environments/{{ .Environment.Name }}.yaml

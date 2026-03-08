@@ -1,0 +1,20 @@
+env: ""
+
+image:
+  repository: agent
+  tag: latest
+  pullPolicy: Never
+
+secret:
+  anthropicApiKey: ""
+
+llm:
+  enabled: true
+  model: "qwen2.5:3b"
+  provider: "ollama"
+  url: "http://llm:11434"
+
+mongo:
+  url: "mongodb://mongo:27017"
+
+query: ""
