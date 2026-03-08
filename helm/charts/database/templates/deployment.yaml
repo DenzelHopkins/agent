@@ -37,4 +37,4 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: mongo-data
+            claimName: {{ .Release.Namespace }}-mongo-data

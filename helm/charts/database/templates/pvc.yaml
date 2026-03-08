@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mongo-data
+  name: {{ .Release.Namespace }}-mongo-data
 spec:
   accessModes:
     - ReadWriteOnce
